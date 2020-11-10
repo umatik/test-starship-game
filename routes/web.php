@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Page\PageController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -15,4 +16,10 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     return view('welcome');
+});
+
+
+Route::namespace('Pages')->group(function () {
+    Route::get('/', [PageController::class, 'home']);
+    Route::get('/game/', [PageController::class, 'game']);
 });
