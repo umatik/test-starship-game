@@ -7,9 +7,15 @@
                 <b-alert show variant="dark" class="d-flex">
                     <div class="align-self-center">
                         Round {{round}}:
-                        <b>{{ opponents[winner].name }}</b> won the competition
-                        {{ getCounter(opponents[winner]._id) }}
-                        {{ getCounter(opponents[winner]._id) > 1 ? 'times' : 'time' }}
+                        <span v-if="opponents[winner].equal">
+                            Starships have the same number of troopers, no one wins.
+                        </span>
+                        <span v-else>
+                            <b>{{ opponents[winner].name }}</b> won the competition
+                            {{ getCounter(opponents[winner]._id) }}
+                            {{ getCounter(opponents[winner]._id) > 1 ? 'times' : 'time' }}
+                        </span>
+
                     </div>
                     <div class="ml-auto p-2">
                         <b-btn @click="playAgain()" variant="primary">Play again</b-btn>

@@ -68,7 +68,7 @@ class DatabaseSeeder extends Seeder
             ],
             [
                 'name' => 'Citadel',
-                'troopers' => 2000000000,
+                'troopers' => 1000000000,
                 'img' => 'citadel'
             ]
         ];
