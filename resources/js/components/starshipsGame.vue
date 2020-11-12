@@ -12,14 +12,13 @@
                         {{ getCounter(opponents[winner]._id) > 1 ? 'times' : 'time' }}
                     </div>
                     <div class="ml-auto p-2">
-                        <b-btn @click="getWinner()" variant="primary">Play again</b-btn>
-                        <b-btn variant="primary" v-b-modal.opponents-modal>Pick opponents</b-btn>
+                        <b-btn @click="playAgain()" variant="primary">Play again</b-btn>
+                        <b-btn variant="primary" @click="showModal">Pick opponents</b-btn>
                     </div>
                 </b-alert>
             </div>
 
             <div class="col-6">
-
                 <b-card
                     header-tag="header"
                     :title="opponents[0].name"
@@ -40,7 +39,6 @@
             </div>
 
             <div class="col-6">
-
                 <b-card
                     header-tag="header"
                     :title="opponents[1].name"
@@ -63,29 +61,26 @@
         </div>
 
         <div>
-            <b-modal id="opponents-modal" ref="opponents-modal" title="BootstrapVue" hide-footer>
-
+            <b-modal ref="opponents-modal" title="Pick opponents" hide-footer>
                 <div class="row">
                     <div class="col-6">
                         <div class="form-group">
-                            <label for="starshipsA">Player One</label>
+                            <label>Player One</label>
                             <b-form-select
                                 v-model="selectedA"
                                 :options="starshipsA"
                                 class="mb-3"
-                                id="starshipsA"
                             >
                             </b-form-select>
                         </div>
                     </div>
                     <div class="col-6">
                         <div class="form-group">
-                            <label for="starshipsB">Player Two</label>
+                            <label >Player Two</label>
                             <b-form-select
                                 v-model="selectedB"
                                 :options="starshipsB"
                                 class="mb-3"
-                                id="starshipsB"
                             >
                             </b-form-select>
                         </div>
@@ -93,7 +88,6 @@
                 </div>
 
                 <b-button class="mt-3" variant="primary" block @click="hideModal">Play the game</b-button>
-
             </b-modal>
         </div>
     </div>
@@ -106,7 +100,7 @@ export default {
         return {
             selectedA: null,
             selectedB: null,
-            starships: false,
+            starships: [],
             opponents: false,
             winner: false,
             winners: [],
@@ -123,20 +117,17 @@ export default {
             return ships
         },
         starshipsA: function () {
-            let table = [...this.starshipsArray]
             if (this.selectedB) {
-                let item = this.starshipsArray.find(ship => ship.value === this.selectedB)
-                if (item) {
-                    let index = this.starshipsArray.indexOf(item)
-                    table.splice(index, 1)
-                }
-
-                return table
+                return this.createStarshipsList(this.selectedB)
             }
 
             return this.starshipsArray
         },
         starshipsB: function () {
+            if (this.selectedA) {
+                return this.createStarshipsList(this.selectedA)
+            }
+
             return this.starshipsArray
         },
         isWinner: function () {
@@ -155,19 +146,39 @@ export default {
 
             axios(param).then(response => {
                 this.starships = response.data.data
+                this.getOpponents()
                 this.getWinner()
             }).catch(error => {
                 console.log(error)
             });
         },
-        getWinner() {
+        createStarshipsList(selected) {
+            let table = [...this.starshipsArray]
+
+            if (selected) {
+                let item = this.starshipsArray.find(ship => ship.value === selected)
+                if (item) {
+                    let index = this.starshipsArray.indexOf(item)
+                    table.splice(index, 1)
+                }
+                return table
+            }
+        },
+        getOpponents(opponents) {
             let allShips = [...this.starships]
             this.opponents = []
 
-            for (let i = 0; i < 2; i++) {
-                let random = Math.floor(Math.random() * allShips.length)
-                this.opponents.push(allShips[random])
-                allShips.splice(random, 1)
+            if (opponents) {
+                opponents.forEach((opponent) => {
+                    const ship = allShips.find(ship => ship._id === opponent)
+                    this.opponents.push(ship)
+                })
+            } else {
+                for (let i = 0; i < 2; i++) {
+                    let random = Math.floor(Math.random() * allShips.length)
+                    this.opponents.push(allShips[random])
+                    allShips.splice(random, 1)
+                }
             }
 
             if (this.opponents[0].troopers > this.opponents[1].troopers) {
@@ -177,6 +188,7 @@ export default {
                 this.opponents[0].equal = false
             } else if (this.opponents[0].troopers == this.opponents[1].troopers) {
                 this.opponents[0].equal = true
+                this.opponents[1].equal = true
             }
             else {
                 this.winner = 1;
@@ -184,15 +196,18 @@ export default {
                 this.opponents[1].winner = true
                 this.opponents[0].equal = false
             }
+        },
+        getWinner() {
+            if (!this.opponents[this.winner].equal) {
+                let winnerId = this.opponents[this.winner]._id
+                let savedWinner = this.winners.find(ship => ship.id === winnerId)
 
-            let winnerId = this.opponents[this.winner]._id
-            let savedWinner = this.winners.find(ship => ship.id === winnerId)
-
-            if (savedWinner) {
-                let index = this.winners.indexOf(savedWinner)
-                this.winners[index].wins++
-            } else {
-                this.winners.push({id: this.opponents[this.winner]._id, wins: 1})
+                if (savedWinner) {
+                    let index = this.winners.indexOf(savedWinner)
+                    this.winners[index].wins++
+                } else {
+                    this.winners.push({id: this.opponents[this.winner]._id, wins: 1})
+                }
             }
 
             this.round++
@@ -206,8 +221,21 @@ export default {
 
             return 0;
         },
+        playAgain() {
+            this.getOpponents()
+            this.getWinner()
+        },
+        showModal() {
+            this.selectedA = null
+            this.selectedB = null
+            this.$refs['opponents-modal'].show()
+        },
         hideModal() {
-
+            if (this.selectedA && this.selectedB) {
+                this.$refs['opponents-modal'].hide()
+                this.getOpponents([this.selectedA, this.selectedB])
+                this.getWinner()
+            }
         }
     }
 }
