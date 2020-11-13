@@ -14,11 +14,11 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        DB::collection('Starship')->delete();
+        DB::collection('Starships')->delete();
 
         $starships = $this->starshipList();
         foreach ($starships as $starship) {
-            DB::collection('Starship')->insert($starship);
+            DB::collection('Starships')->insert($starship);
         }
 
     }
