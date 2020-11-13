@@ -11,6 +11,7 @@ VUE:
 2) Run command: npm run dev
 
 MongoDB:
-1) Create Starships-test db or change entry in config/database.php 99 'database' => env('DB_DATABASE', 'Starships-test'),
-2) Create Starships collection
-3) Run command: php artisan db:seed
+1) Run command: php artisan db:seed
+
+Run project:
+1) Run command: php artisan serve
