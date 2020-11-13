@@ -1,19 +1,27 @@
 <?php
 
-namespace App\Http\Controllers\Api\V1;
+namespace Database\Factories;
 
-use App\Http\Controllers\Api\ApiController;
 use App\Models\Starship;
 use App\Models\User;
+use Illuminate\Database\Eloquent\Factories\Factory;
+use Illuminate\Support\Str;
 
-class GameController extends ApiController
+class StarshipFactory extends Factory
 {
-    public function starships()
-    {
-        return $this->success($this->getData());
-    }
+    /**
+     * The name of the factory's corresponding model.
+     *
+     * @var string
+     */
+    protected $model = Starship::class;
 
-    public function getData()
+    /**
+     * Define the model's default state.
+     *
+     * @return array
+     */
+    public function definition()
     {
         return [
             [
@@ -62,5 +70,6 @@ class GameController extends ApiController
                 'img' => 'citadel'
             ]
         ];
+
     }
 }

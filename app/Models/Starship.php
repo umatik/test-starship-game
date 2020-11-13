@@ -2,12 +2,15 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Jenssegers\Mongodb\Eloquent\Model as Eloquent;
 
 class Starship extends Eloquent
 {
-    protected $connection = 'mongodb';
-    protected $collection = 'Starships';
+    use HasFactory;
+
+    //protected $connection = 'mongodb';
+    //protected $collection = 'Starships';
 
     protected $fillable = [
         'name', 'troops','group'
