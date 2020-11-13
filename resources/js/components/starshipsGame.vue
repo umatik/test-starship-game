@@ -15,7 +15,6 @@
                             {{ getCounter(opponents[winner]._id) }}
                             {{ getCounter(opponents[winner]._id) > 1 ? 'times' : 'time' }}
                         </span>
-
                     </div>
                     <div class="ml-auto p-2">
                         <b-btn @click="playAgain()" variant="primary">Play again</b-btn>
@@ -65,7 +64,11 @@
                 </b-card>
             </div>
         </div>
-
+        <div class="row" v-else>
+            <div class="col">
+                <h3 class="text-white">Loading starships please wait...</h3>
+            </div>
+        </div>
         <div>
             <b-modal ref="opponents-modal" title="Pick opponents" hide-footer>
                 <div class="row">
@@ -167,6 +170,7 @@ export default {
                     let index = this.starshipsArray.indexOf(item)
                     table.splice(index, 1)
                 }
+
                 return table
             }
         },
@@ -190,17 +194,21 @@ export default {
             if (this.opponents[0].troopers > this.opponents[1].troopers) {
                 this.winner = 0;
                 this.opponents[0].winner = true
-                this.opponents[1].winner = false
                 this.opponents[0].equal = false
+                this.opponents[1].winner = false
+                this.opponents[1].equal = false
             } else if (this.opponents[0].troopers == this.opponents[1].troopers) {
+                this.opponents[0].winner = false
                 this.opponents[0].equal = true
+                this.opponents[1].winner = false
                 this.opponents[1].equal = true
             }
             else {
                 this.winner = 1;
                 this.opponents[0].winner = false
-                this.opponents[1].winner = true
                 this.opponents[0].equal = false
+                this.opponents[1].winner = true
+                this.opponents[1].equal = false
             }
         },
         getWinner() {
@@ -227,8 +235,8 @@ export default {
 
             return 0;
         },
-        playAgain() {
-            this.getOpponents()
+        playAgain(selected = false) {
+            this.getOpponents(selected)
             this.getWinner()
         },
         showModal() {
@@ -239,8 +247,7 @@ export default {
         hideModal() {
             if (this.selectedA && this.selectedB) {
                 this.$refs['opponents-modal'].hide()
-                this.getOpponents([this.selectedA, this.selectedB])
-                this.getWinner()
+                this.playAgain([this.selectedA, this.selectedB])
             }
         }
     }
