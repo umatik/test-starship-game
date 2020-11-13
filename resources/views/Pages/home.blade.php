@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
-@section('title', 'Page Title')
+@section('title', 'Starships game')
 
 @section('content')
-    <p>This is my body content.</p>
+    <starship-game></starship-game>
 @endsection

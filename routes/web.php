@@ -18,8 +18,6 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-
 Route::namespace('Pages')->group(function () {
     Route::get('/', [PageController::class, 'home']);
-    Route::get('/game/', [PageController::class, 'game']);
 });

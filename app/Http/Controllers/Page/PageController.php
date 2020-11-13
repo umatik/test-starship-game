@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Page;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Contracts\View\Factory;
+use Illuminate\Contracts\View\View;
 
 /**
  * Class PageController
@@ -17,13 +18,5 @@ class PageController  extends Controller
     public function home()
     {
         return view('Pages.home');
-    }
-
-    /**
-     * @return Factory|View
-     */
-    public function game()
-    {
-        return view('Pages.game');
     }
 }

@@ -197,13 +197,12 @@ export default {
                 this.opponents[0].equal = false
                 this.opponents[1].winner = false
                 this.opponents[1].equal = false
-            } else if (this.opponents[0].troopers == this.opponents[1].troopers) {
+            } else if (this.opponents[0].troopers === this.opponents[1].troopers) {
                 this.opponents[0].winner = false
                 this.opponents[0].equal = true
                 this.opponents[1].winner = false
                 this.opponents[1].equal = true
-            }
-            else {
+            } else {
                 this.winner = 1;
                 this.opponents[0].winner = false
                 this.opponents[0].equal = false
