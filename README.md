@@ -10,5 +10,5 @@ Laravel:
 MongoDB:
 
 1) Create Starship-test db or change entry in config/database.php 99 'database' => env('DB_DATABASE', 'Starship-test'),
-2) Create starships collection
+2) Create Starships collection
 3) Run command: php artisan db:seed
