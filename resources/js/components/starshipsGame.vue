@@ -155,6 +155,7 @@ export default {
 
             axios(param).then(response => {
                 this.starships = response.data.data
+                console.log(this.starships)
                 this.getOpponents()
                 this.getWinner()
             }).catch(error => {
@@ -242,8 +243,10 @@ export default {
             this.selectedA = null
             this.selectedB = null
             this.$refs['opponents-modal'].show()
+
         },
         hideModal() {
+            console.log(this.selectedB)
             if (this.selectedA && this.selectedB) {
                 this.$refs['opponents-modal'].hide()
                 this.playAgain([this.selectedA, this.selectedB])

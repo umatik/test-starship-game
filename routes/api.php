@@ -21,5 +21,4 @@ use Illuminate\Support\Facades\Route;
 
 Route::group(['namespace' => 'Api\V1', 'prefix' => 'v1'], function () {
     Route::get('/starships', [GameController::class, 'starships']);
-    Route::get('/test', [GameController::class, 'test']);
 });
